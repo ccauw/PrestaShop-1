@@ -120,12 +120,13 @@ class AdminEmployeesControllerCore extends AdminController
 		foreach (scandir($path) as $theme)
 			if ($theme[0] != '.' && is_dir($path.$theme) && (@filemtime($path.$theme.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'admin-theme.css')))
 			{
-				$this->themes[] = array('id' => $theme.'|admin-theme'.$rtl.'.css', 'name' => $this->l('Default'));
+				$t = $theme != 'default' ? $theme.'|' : '';
+				$this->themes[] = array('id' => $theme.'|admin-theme'.$rtl.'.css', 'name' => $t.$this->l('Default'));
 				if (file_exists($path.$theme.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'schemes'.$rtl))
 					foreach (scandir($path.$theme.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'schemes'.$rtl) as $css)
 						if ($css[0] != '.' && preg_match('/\.css$/', $css))
 						{
-							$name = (strpos($css,'admin-theme-') !== false ? Tools::ucfirst(preg_replace('/^admin-theme-(.*)\.css$/', '$1', $css)) : $css);
+							$name = $t.(strpos($css,'admin-theme-') !== false ? Tools::ucfirst(preg_replace('/^admin-theme-(.*)\.css$/', '$1', $css)) : $css);
 							$this->themes[] = array('id' => $theme.'|schemes'.$rtl.'/'.$css, 'name' => $name);
 						}
 			}
